@@ -1,8 +1,10 @@
+import 'package:cobacoba/pages/campaignDetail.dart';
 import 'package:flutter/material.dart';
 import '../components/campaignCard.dart';
 import '../components/artisCard.dart';
-
-import 'package:cobacoba/pages/createCampaign.dart'; // ganti nama_folder sesuai tempat file kamu
+import 'package:cobacoba/pages/createCampaign.dart';
+import '../components/traffic_chart.dart';
+import 'package:cobacoba/pages/artistDetail.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -180,64 +182,62 @@ class _HomePageState extends State<HomePage> {
               //Trafic Container
               Container(
                 width: double.infinity,
-                height: 300,
-                margin: const EdgeInsets.only(bottom: 16),
+                margin: const EdgeInsets.only(bottom: 20),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
-                  vertical: 12,
+                  vertical: 20,
                 ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
                 ),
-
-                child: Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    const Text(
+                      "Your Traffic",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
                       children: const [
-                        SizedBox(height: 12),
                         Text(
-                          "Your Trafic",
+                          "327",
                           style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: 13,
+                            color: Color(0xff51556B),
+                            fontSize: 32,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 4),
-
-                        Row(
-                          children: const [
-                            Text(
-                              "327",
-                              style: TextStyle(
-                                color: Color(0xff51556B),
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(width: 6),
-                            Text(
-                              "Campaigns",
-                              style: TextStyle(
-                                color: Color(0xffA3AED0),
-                                fontSize: 13,
-                              ),
-                            ),
-                          ],
+                        SizedBox(height: 6),
+                        Text(
+                          "Campaigns",
+                          style: TextStyle(
+                            color: Color(0xffA3AED0),
+                            fontSize: 13,
+                          ),
                         ),
                       ],
                     ),
-                    // Icon + di sebelah kanan
-                    const Icon(
-                      Icons.add, // Icon tambah
-                      color: Colors.white, // Warna putih
+                    const SizedBox(height: 20),
+                    TrafficChart(
+                      trafficData: [
+                        {"month": "Aug", "count": 4},
+                        {"month": "Sept", "count": 3},
+                        {"month": "Oct", "count": 8},
+                        {"month": "Nov", "count": 5},
+                        {"month": "Dec", "count": 7},
+                        {"month": "Jan", "count": 11},
+                        {"month": "Feb", "count": 2},
+                      ],
                     ),
                   ],
                 ),
               ),
-
               //campaign container
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -305,35 +305,31 @@ class _HomePageState extends State<HomePage> {
               /// campaign product
               GridView.count(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: 2,
                 mainAxisSpacing: 25,
                 crossAxisSpacing: 16,
                 childAspectRatio: 0.7,
                 children: List.generate(4, (index) {
-                  return CampaignCard(
-                    imagePath: 'assets/Baju.jpg',
-                    campaignName: 'Campaign ${index + 1}',
-                    createdTime: 'Created ${5 * (index + 1)} minutes ago',
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => const CampaignDetailPage(
+                                currentStep: 2,
+                              ), // Panggil ke halaman detail
+                        ),
+                      );
+                    },
+                    child: CampaignCard(
+                      imagePath: 'assets/Baju.jpg',
+                      campaignName: 'Campaign ${index + 1}',
+                      createdTime: 'Created ${5 * (index + 1)} minutes ago',
+                    ),
                   );
                 }),
-              ),
-
-              SizedBox(height: 10),
-
-              //Popular Creator
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
-                  Text(
-                    "Popular Creator for You",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
               ),
 
               SizedBox(height: 10),
@@ -347,14 +343,23 @@ class _HomePageState extends State<HomePage> {
                 crossAxisSpacing: 16,
                 childAspectRatio: (MediaQuery.of(context).size.width / 2) / 340,
                 children: List.generate(4, (index) {
-                  return ArtisCard(
-                    imagePath: 'assets/Baju.jpg',
-                    nama: 'Nama Creator',
-                    lokasi: 'Jakarta',
-                    igFollowers: '22.4 M',
-                    ytFollowers: '12.8 M',
-                    rating: 5.0,
-                    harga: 'Start from Rp. 1.2 M',
+                  return GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CombinedPage()),
+                      );
+                    },
+                    child: ArtisCard(
+                      imagePath: 'assets/Baju.jpg',
+                      nama: 'Nama Creator',
+                      lokasi: 'Jakarta',
+                      igFollowers: '22.4 M',
+                      ytFollowers: '12.8 M',
+                      rating: 5.0,
+                      harga: 'Start from Rp. 1.2 M',
+                    ),
                   );
                 }),
               ),

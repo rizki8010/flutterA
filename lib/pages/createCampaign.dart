@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'aiGenerate.dart'; // Pastikan ini adalah halaman yang ingin dituju setelah submit
+import 'package:dotted_border/dotted_border.dart';
 
 class CreateCampaignPage extends StatefulWidget {
   const CreateCampaignPage({Key? key}) : super(key: key);
@@ -24,7 +25,7 @@ class _CreateCampaignPageState extends State<CreateCampaignPage> {
   String? _selectedPlatform;
   DateTime? _startDate;
   DateTime? _endDate;
-  File? _selectedImage;
+  List<File> _selectedImages = [];
 
   final List<String> _categories = ['Electronics', 'Fashion', 'Food', 'Books'];
   final List<String> _prices = [
@@ -35,14 +36,18 @@ class _CreateCampaignPageState extends State<CreateCampaignPage> {
   ];
   final List<String> _platforms = ['Instagram', 'TikTok', 'YouTube', 'Twitter'];
 
-  void _pickImage() async {
+  void _pickImages() async {
     final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    final pickedFiles = await picker.pickMultiImage();
 
-    if (pickedFile != null) {
+    if (pickedFiles != null && pickedFiles.length <= 5) {
       setState(() {
-        _selectedImage = File(pickedFile.path);
+        _selectedImages = pickedFiles.map((file) => File(file.path)).toList();
       });
+    } else if (pickedFiles != null && pickedFiles.length > 5) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Max 5 images allowed")));
     }
   }
 
@@ -65,9 +70,7 @@ class _CreateCampaignPageState extends State<CreateCampaignPage> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-            ), // Add padding here
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Form(
               key: _formKey,
               child: Column(
@@ -114,7 +117,6 @@ class _CreateCampaignPageState extends State<CreateCampaignPage> {
                   // --- Section: Category & Price ---
                   const SizedBox(height: 16),
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: Column(
@@ -152,9 +154,7 @@ class _CreateCampaignPageState extends State<CreateCampaignPage> {
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        width: 16,
-                      ), // Jarak horizontal antara dropdown
+                      const SizedBox(width: 16),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -283,21 +283,59 @@ class _CreateCampaignPageState extends State<CreateCampaignPage> {
                     ],
                   ),
 
-                  // --- Section: Upload Gambar ---
+                  // --- Section: Upload Images ---
                   const SizedBox(height: 16),
-                  const Text(
-                    'Upload Image',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Upload Images (Max 5)',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
-                  ElevatedButton.icon(
-                    onPressed: _pickImage,
-                    icon: const Icon(Icons.image),
-                    label: const Text("Select Image"),
+                  const SizedBox(height: 12),
+                  DottedBorder(
+                    color: Colors.blueAccent,
+                    strokeWidth: 1.5,
+                    radius: const Radius.circular(12),
+                    dashPattern: const [6, 3],
+                    borderType: BorderType.RRect,
+                    child: InkWell(
+                      onTap: _pickImages,
+                      child: Container(
+                        width: double.infinity,
+                        height: 160,
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.upload_file,
+                              size: 40,
+                              color: Colors.blue,
+                            ),
+                            SizedBox(height: 8),
+                            Text('Upload your images here'),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                  if (_selectedImage != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Image.file(_selectedImage!, height: 100),
+
+                  // Display selected images
+                  const SizedBox(height: 12),
+                  if (_selectedImages.isNotEmpty)
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children:
+                          _selectedImages.map((image) {
+                            return Image.file(
+                              image,
+                              width: 80,
+                              height: 80,
+                              fit: BoxFit.cover,
+                            );
+                          }).toList(),
                     ),
 
                   // --- Section: Description, Goal, Note ---
@@ -366,7 +404,7 @@ class _CreateCampaignPageState extends State<CreateCampaignPage> {
                       onPressed: _submitForm,
                       child: const Text("Submit Campaign"),
                       style: ElevatedButton.styleFrom(
-                        minimumSize: Size(double.infinity, 50), // Full width
+                        minimumSize: Size(double.infinity, 50),
                       ),
                     ),
                   ),

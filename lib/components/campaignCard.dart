@@ -65,57 +65,29 @@ class CampaignCard extends StatelessWidget {
           SizedBox(height: 10),
 
           // Tombol
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                height: 35,
-                child: TextButton(
-                  onPressed: () {
-                    print('Show More dari $campaignName');
-                  },
-                  style: TextButton.styleFrom(
-                    backgroundColor: Color(0xFF3E54AC),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 30),
-                  ),
-                  child: Text(
-                    'Show More',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                height: 35,
-                width: 35,
-                decoration: BoxDecoration(
-                  color: Color(0xFF3E54AC),
+          SizedBox(
+            height: 35,
+            width: double.infinity,
+            child: TextButton(
+              onPressed: () {
+                print('Show More dari $campaignName');
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: Color(0xFF3E54AC),
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: PopupMenuButton<String>(
-                  onSelected: (value) {
-                    // Aksi menu
-                  },
-                  itemBuilder:
-                      (context) => [
-                        PopupMenuItem(value: 'edit', child: Text('Edit')),
-                        PopupMenuItem(value: 'delete', child: Text('Delete')),
-                        PopupMenuItem(
-                          value: 'detail',
-                          child: Text('Lihat Detail'),
-                        ),
-                      ],
-                  icon: Icon(Icons.more_vert, color: Colors.white, size: 20),
-                  padding: EdgeInsets.zero,
+                padding: EdgeInsets.symmetric(horizontal: 30),
+              ),
+              child: Text(
+                'Show More',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
                 ),
               ),
-            ],
+            ),
           ),
         ],
       ),
