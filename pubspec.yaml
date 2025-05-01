@@ -22,6 +22,7 @@ dependencies:
   path_provider: ^2.0.14
   file_picker: ^10.1.2
   fl_chart: ^0.65.0
+  lucide_icons: ^0.257.0
 
 dev_dependencies:
   flutter_test:
@@ -34,6 +35,7 @@ flutter:
     - assets/Baju.jpg
     - assets/AiDorseLogo.png
     - assets/default_qr.png
+    - assets/ownerProfile.png
     - assets/icons/youtube.jpg
     - assets/icons/instagram.png
     - assets/icons/tiktok.png

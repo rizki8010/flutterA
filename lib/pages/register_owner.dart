@@ -153,7 +153,15 @@ class _RegisterOwnerState extends State<RegisterOwner> {
                             content: Text('Account created successfully!'),
                           ),
                         );
-                        // lanjut ke proses pendaftaran...
+
+                        // Navigasi ke halaman Home dan hapus semua halaman sebelumnya
+                        Future.delayed(const Duration(milliseconds: 500), () {
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/home',
+                            (route) => false,
+                          );
+                        });
                       }
                     },
                     child: const Text(

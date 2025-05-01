@@ -101,7 +101,9 @@ class _CampaignDetailPageState extends State<CampaignDetailPage> {
             const SizedBox(height: 20),
             _buildContentOverview(),
             const SizedBox(height: 20),
+            // Di dalam Widget build -> Column -> children:
             _buildContentLink(),
+            if (currentStep >= 5) _buildReviewSection(),
           ],
         ),
       ),
@@ -462,6 +464,98 @@ class _CampaignDetailPageState extends State<CampaignDetailPage> {
             onTap: () {
               // Implementasi open link nanti
             },
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Tambahkan variabel state untuk rating bintang
+  int _selectedStars = 0;
+
+  // Tambahkan widget ini di dalam class _CampaignDetailPageState
+  Widget _buildReviewSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 20),
+        const Text(
+          'Review This Campaign',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey[300]!),
+          ),
+          child: Column(
+            children: [
+              TextField(
+                maxLines: 5,
+                decoration: InputDecoration(
+                  hintText: 'Write your review here...',
+                  border: InputBorder.none,
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(5, (index) {
+                  return IconButton(
+                    icon: Icon(
+                      index < _selectedStars ? Icons.star : Icons.star_border,
+                      color:
+                          index < _selectedStars ? Colors.amber : Colors.grey,
+                      size: 40,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _selectedStars = index + 1;
+                      });
+                    },
+                  );
+                }),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Handle submit review
+                    print('Review submitted: $_selectedStars stars');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Review submitted successfully!'),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF4C6EF5),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    'Send Review',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ],

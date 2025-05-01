@@ -11,11 +11,13 @@ class AIGeneratePage extends StatefulWidget {
 }
 
 class _AIGeneratePageState extends State<AIGeneratePage> {
-  bool isEditable = false;
+  bool isEditableCampaign = false; // Flag for editing campaign description
+  bool isEditableImportantNote = false; // Flag for editing important note
   bool isUpdated = false; // Flag to track if the content has been updated
   final TextEditingController _controllerCampaign = TextEditingController();
   final TextEditingController _controllerImportantNote =
       TextEditingController();
+
   @override
   void dispose() {
     _controllerCampaign.dispose();
@@ -158,7 +160,7 @@ class _AIGeneratePageState extends State<AIGeneratePage> {
                   children: [
                     TextField(
                       controller: _controllerCampaign,
-                      readOnly: !isEditable,
+                      readOnly: !isEditableCampaign,
                       maxLines: 5,
                       decoration: const InputDecoration(
                         hintText: "Enter text...",
@@ -171,12 +173,12 @@ class _AIGeneratePageState extends State<AIGeneratePage> {
                       alignment: Alignment.bottomRight,
                       child: IconButton(
                         icon: Icon(
-                          isEditable ? Icons.check : Icons.edit,
+                          isEditableCampaign ? Icons.check : Icons.edit,
                           size: 20,
                         ),
                         onPressed: () {
                           setState(() {
-                            isEditable = !isEditable;
+                            isEditableCampaign = !isEditableCampaign;
                             isUpdated = true; // Mark as updated
                           });
                         },
@@ -188,7 +190,7 @@ class _AIGeneratePageState extends State<AIGeneratePage> {
 
               const SizedBox(height: 12),
               const Text(
-                "AI Sugesstion",
+                "AI Suggestion",
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
@@ -255,7 +257,7 @@ class _AIGeneratePageState extends State<AIGeneratePage> {
                   children: [
                     TextField(
                       controller: _controllerImportantNote,
-                      readOnly: !isEditable,
+                      readOnly: !isEditableImportantNote,
                       maxLines: 5,
                       decoration: const InputDecoration(
                         hintText: "Enter text...",
@@ -268,12 +270,12 @@ class _AIGeneratePageState extends State<AIGeneratePage> {
                       alignment: Alignment.bottomRight,
                       child: IconButton(
                         icon: Icon(
-                          isEditable ? Icons.check : Icons.edit,
+                          isEditableImportantNote ? Icons.check : Icons.edit,
                           size: 20,
                         ),
                         onPressed: () {
                           setState(() {
-                            isEditable = !isEditable;
+                            isEditableImportantNote = !isEditableImportantNote;
                             isUpdated = true; // Mark as updated
                           });
                         },
@@ -285,7 +287,7 @@ class _AIGeneratePageState extends State<AIGeneratePage> {
 
               const SizedBox(height: 12),
               const Text(
-                "AI Sugesstion",
+                "AI Suggestion",
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),

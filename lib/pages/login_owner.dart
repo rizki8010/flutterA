@@ -133,6 +133,7 @@ class _LoginOwnerState extends State<LoginOwner> {
                 const SizedBox(height: 30),
 
                 // Login Button
+                // Login Button
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -143,9 +144,13 @@ class _LoginOwnerState extends State<LoginOwner> {
                           const SnackBar(content: Text('Logging in...')),
                         );
 
-                        // Navigasi ke halaman Home
+                        // Navigasi ke halaman Home dan hapus semua halaman sebelumnya
                         Future.delayed(const Duration(milliseconds: 500), () {
-                          Navigator.pushNamed(context, '/home');
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/home',
+                            (route) => false,
+                          );
                         });
                       }
                     },
@@ -195,7 +200,7 @@ class _LoginOwnerState extends State<LoginOwner> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SvgPicture.asset(
-                          'assets/cobacoba/devicon_google.svg',
+                          'assets/login_regist/devicon_google.svg',
                           height: 20,
                           width: 20,
                         ),
